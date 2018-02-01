@@ -1,0 +1,3 @@
+[submodule "ref/node-docker-api"]
+	path = ref/node-docker-api
+	url = https://github.com/mjhea0/node-docker-api
