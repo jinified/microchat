@@ -4,7 +4,7 @@ services:
 
   users-db:
     container_name: users-db
-    build: ./services/users/src/db
+    build: ./services/chat-api/src/db
     ports:
       - '5433:5432'
     environment:
@@ -13,32 +13,20 @@ services:
     healthcheck:
       test: exit 0
 
-  locations-db:
-    container_name: locations-db
-    build: ./services/locations/src/db
-    ports:
-      - '5434:5432'
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-    healthcheck:
-      test: exit 0
-
   users-service:
     container_name: users-service
-    build: ./services/users/
+    build: ./services/chat-api/
     volumes:
-      - './services/users:/src/app'
-      - './services/users/package.json:/src/package.json'
+        - './services/chat-api:/src/app'
     ports:
-      - '3000:3000'
+        - '3000:3000'
     environment:
-      - DATABASE_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_dev
-      - DATABASE_TEST_URL=postgres://admin:admin@users-db:5432/node_docker_api_users_test
-      - NODE_ENV=${NODE_ENV}
-      - TOKEN_SECRET=changeme
+        - DATABASE_URL=postgres://admin:admin@users-db:5432/microchat_users_dev
+        - DATABASE_TEST_URL=postgres://admin:admin@users-db:5432/microchat_users_test
+        - NODE_ENV=${NODE_ENV}
+        - TOKEN_SECRET=changeme
     depends_on:
-      users-db:
-        condition: service_healthy
+        users-db:
+            condition: service_healthy
     links:
-      - users-db
+        - users-db
